@@ -1,0 +1,71 @@
+{% extends 'jobmanager/base.html' %}
+{% load template_filters %}
+{% load static %}
+
+{% block title %}
+{{ user }} | Jobmanager
+{% endblock %}
+
+{% block content %}
+
+
+<section class="main-button mt-4">
+    <div class="container">
+        <h1 class="text-center text-info">Welcome {{ user }}</h1>
+        <hr>
+        <a class="btn btn-outline-danger mr-2 " href="{% url 'loggedout' %}" role="button">Logout</a>
+    </div>
+</section>
+
+<section class="main-table mt-5">
+    <div class="container">
+        <table class="table table-striped table-bordered table-responsive-lg text-center">
+            <thead>
+                <tr class="text-uppercase">
+                    <th scope="col">S. NO.</th>
+                    <th scope="col">Select/Reject</th>
+                    <th scope="col">Roll No</th>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Github</th>
+                    <th scope="col">Resume</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in students %}
+                <tr>
+                    <th>{{ forloop.counter }}</th>
+
+                    {% if not status|get_value:obj.roll_no %}
+                    <td>
+                        <form method="POST" action="{% url 'selectstudent'%}">
+                            {% csrf_token %}
+                            <input type="hidden" name="student-roll" value="{{ obj.roll_no }}" />
+                            <input type="submit" class="btn btn-outline-success mr-2" value="Select" name="select-student" />
+                        </form>
+                    </td>
+                    {% else %}
+                    <td>Selected</td>
+                    {% endif %}
+                    <td>{{ obj.roll_no }}</td>
+                    <td>{{  obj.name }}</td>
+                    {% if obj.github is not None %}
+                    <td><a href='{{ obj.github }}' target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a></td>
+                    {% else %}
+                    <td><p>NA</p></td>
+                    {% endif %}
+                    <td>
+                        <embed src="{% static obj.resume|get_location %}" type="application/pdf" width="550px"
+                            height="400px" />
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <th colspan="6">No student has applied.</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

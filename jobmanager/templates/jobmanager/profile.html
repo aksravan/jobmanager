@@ -1,0 +1,75 @@
+{% extends 'jobmanager/base.html'%}
+{% load static %}
+{% block title %}{{ user }} | Profile | JobManager{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class=" main-button mt-4">
+<div class="container">
+    <h1 class="text-center text-info">Welcome {{ user }}</h1>
+    <hr>
+    <a class="btn btn-outline-success mr-2 " href="{% url 'success' %}" role="button">Home</a>
+    <a class="btn btn-outline-danger mr-2 " href="{% url 'loggedout' %}" role="button">Logout</a>
+</div>
+</section>
+
+
+<section class="student-details mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-12">
+                <p class="lead">Student Details</p>
+                <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="name" placeholder="Name" {% if student is not None %}
+                            value="{{ student.name }}" disabled {% endif %} required />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="roll_no" placeholder="Roll Number" value="{{ user }}"
+                            {% if student is not None %} disabled {% endif %} required />
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="semester" placeholder="Semester" min="1" max="8" {% if student %}
+                            value="{{ student.semester }}" disabled {% endif %} required />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Email" 
+                            {% if student is not None %} value="{{ student.email }}" disabled {% endif %} autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="college" placeholder="College Name" {% if student is not None %}
+                            value="{{ student.college }}" disabled {% endif %} required />
+                    </div>
+                    <div class="form-group">
+                        <input type="url" class="form-control" name="github" placeholder="Github" {% if student is not None %}
+                            value="{{ student.github }}" disabled {% endif %} autocomplete="off" />
+                    </div>
+                    {% if student is None %}
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" name="resume" style="padding-top: 15px" accept=".pdf" required />
+                    </div>
+                    <input class="btn btn-outline-success mr-2 " type="submit" value="Save">
+                    
+                    {% endif %}
+
+                    {% for message in messages %}
+                    <p id="messages">{{message}}</p>
+                    {% endfor %}
+                </form>
+            </div>
+            {% if student is not None %}
+            <div class="col-md-6 col-lg-6 col-12 mt-2">
+                <div class="container">
+                    <iframe class="responsive-iframe" src="{% static resume %}"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

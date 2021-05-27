@@ -1,0 +1,75 @@
+{% extends 'jobmanager/base.html'%}
+{% load static %}
+{% block title %}Admin | JobManager {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/superuser.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<section class="main-buttons mt-4">
+    <div class="container">
+        <h1 class="text-center text-info">Welcome, Admin</h1>
+        <hr>
+        <a class="btn btn-outline-success mr-2 " href="{% url 'allcompany' %}" role="button">Show Companies</a>
+        <a class="btn btn-outline-success mr-2 " href="{% url 'allstudents' %}" role="button">Show Students</a>
+        <a class="btn btn-outline-success mr-2 " href="{% url 'appliedstudents' %}" role="button">Applied Students</a>
+        <a class="btn btn-outline-info mr-2 " href="{% url 'selectedstudents' %}" role="button">Selected Students</a>
+        <a class="btn btn-outline-danger mr-2 " href="{% url 'deletestudents' %}" role="button">Delete Students</a>
+        <a class="btn btn-outline-danger mr-2 " href="{% url 'deletecompanies' %}" role="button">Delete Companies</a>
+        <a class="btn btn-outline-danger mr-2 " href="{% url 'loggedout' %}" role="button">Logout</a>
+    </div>
+</section>
+
+<section class="student-details mt-4 mb-4">
+    <div class="container">
+        <p class="lead font-weight-bold mt-2">Add Company Here</p>
+        <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class=" form-group">
+                <input class="form-control" type="text" name="company_name" placeholder="Company Name" required />
+            </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="usrname" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" type="text" name="requirements" placeholder="Requirements" required></textarea>
+        </div>
+            <input class="btn btn-outline-success mr-2" value="Save" type="submit" name="add-company" />
+        </form>
+    {% for msg in messages %}
+    <p><b>{{ msg }}</b></p>
+    {% endfor %}
+    </div>
+</section>
+
+
+<section class="student-details mt-4 mb-4">
+    <div class="container">
+        <p class="lead font-weight-bold mt-2">Register Company Here</p>
+
+        <form action="" , method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="text" name="username" placeholder="Username" autocomplete="off"
+                    required />
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="usrname" placeholder="Email" autocomplete="off" required />
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password1" placeholder="Password(min 8 characters)"
+                    required />
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password2" placeholder="Re-enter Password" required />
+            </div>
+            <input type="submit" class="btn btn-outline-success mr-2" value="Register Company" name="register-company" />
+        </form>
+
+        <p>{{ status }}</p>
+
+    </div>
+</section>
+{% endblock %}
